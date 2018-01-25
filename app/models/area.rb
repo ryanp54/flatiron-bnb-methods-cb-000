@@ -43,18 +43,7 @@ module Area
 	  	checkin = Date.parse(checkin)
 	  	checkout = Date.parse(checkout)
 	  	self.listings.collect do |listing|
-	  		overlaps = listing.reservations.collect do |reservation|
-	  			if (reservation.checkout > checkin and reservation.checkin < checkout)
-	  				true
-	  			else
-	  				false
-	  			end
-	  		end
-				if !overlaps.include?(true)
-					listing
-	  		else
-	  			nil
-	  		end
+	  		listing.available?(checkin, checkout) ? listing : nil
 	  	end
 	  end
 	end

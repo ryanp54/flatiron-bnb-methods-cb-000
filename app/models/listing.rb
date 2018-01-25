@@ -19,6 +19,7 @@ class Listing < ActiveRecord::Base
   	self.host.host = true
   	self.host.save  	
   end
+
   def deactivate_host
   	if self.host.listings.count == 1
 	  	self.host.host = false
@@ -34,4 +35,14 @@ class Listing < ActiveRecord::Base
   	total_stars.to_f / self.reviews.count.to_f
   end
 
+  def available?(checkin, checkout)
+  	overlaps = self.reservations.collect do |reservation|
+			if (reservation.checkout > checkin and reservation.checkin < checkout)
+				true
+			else
+				false
+			end
+		end
+		!overlaps.include?(true)
+	end
 end
